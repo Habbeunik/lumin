@@ -66,6 +66,7 @@ export const ProductName = styled.p`
 export const ProductPrice = styled.p`
   font-size: 18px;
   margin: 0px;
+  font-family: Bau;
 
   @media (max-width: 768px) {
     font-size: 13px;

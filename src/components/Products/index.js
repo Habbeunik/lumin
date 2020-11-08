@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import useAppState from '../../appState';
 
 import { Container } from './../Layout';
 import {
@@ -12,20 +12,8 @@ import {
 } from './Elements';
 import ProductItem from './ProductItem';
 
-const PRODUCTS_QUERY = gql`
-  query GetProducts {
-    products {
-      id
-      title
-      image_url
-      price(currency: USD)
-    }
-  }
-`;
-
-const Products = () => {
-  const { loading, error, data = {} } = useQuery(PRODUCTS_QUERY);
-  const { products = [] } = data;
+const Products = ({}) => {
+  const { addToCart, products } = useAppState();
 
   return (
     <Fragment>
@@ -40,11 +28,13 @@ const Products = () => {
         <Container>
           <Gallery>
             {products.map((product) => (
-              <GalleryItem>
+              <GalleryItem key={product.id}>
                 <ProductItem
+                  id={product.id}
                   name={product.title}
                   price={product.price}
                   img={product.image_url}
+                  onAddToCart={addToCart}
                 />
               </GalleryItem>
             ))}

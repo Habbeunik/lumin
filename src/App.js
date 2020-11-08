@@ -1,24 +1,21 @@
-import React, { Fragment } from 'react';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import React from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
+import Cart from './components/Cart';
 
 import './styles/normalize.css';
 import './styles/font.css';
 import './styles/base.css';
-
-const client = new ApolloClient({
-  uri: 'https://pangaea-interviews.now.sh/api/graphql',
-  cache: new InMemoryCache(),
-});
+import { AppStateProvider } from './appState';
 
 function App() {
   return (
-    <ApolloProvider client={client}>
+    <AppStateProvider>
       <Header />
       <Products />
-    </ApolloProvider>
+      <Cart />
+    </AppStateProvider>
   );
 }
 
