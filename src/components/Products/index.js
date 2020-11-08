@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import useAppState from '../../appState';
-
 import { Container } from './../Layout';
 import {
   Header,
@@ -13,7 +12,7 @@ import {
 import ProductItem from './ProductItem';
 
 const Products = ({}) => {
-  const { addToCart, products } = useAppState();
+  const { addToCart, products, currencySymbol } = useAppState();
 
   return (
     <Fragment>
@@ -32,7 +31,7 @@ const Products = ({}) => {
                 <ProductItem
                   id={product.id}
                   name={product.title}
-                  price={product.price}
+                  price={`${currencySymbol}${product.price}`}
                   img={product.image_url}
                   onAddToCart={addToCart}
                 />

@@ -48,6 +48,7 @@ export const NavGroup = styled(Group)`
 const CartWrap = styled.div`
   position: relative;
   margin-left: 30px;
+  cursor: pointer;
 `;
 const CartImg = styled.img`
   height: 23px;

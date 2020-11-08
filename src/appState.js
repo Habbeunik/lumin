@@ -4,8 +4,10 @@ import {
   useContext,
   useMemo,
   useReducer,
+  useState,
 } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const AppStateContext = createContext({
   cart: [],
@@ -16,15 +18,17 @@ const AppStateContext = createContext({
   addToCart: () => {},
   closeCart: () => {},
   openCart: () => {},
+  currency: 'USD',
+  setCurrency: () => {},
 });
 
 const PRODUCTS_QUERY = gql`
-  query GetProducts {
+  query GetProducts($currency: Currency!) {
     products {
       id
       title
       image_url
-      price(currency: USD)
+      price(currency: $currency)
     }
   }
 `;
@@ -92,7 +96,8 @@ const flattenProductList = (arr = []) =>
   arr.reduce((obj, arrItem) => ({ ...obj, [arrItem.id]: arrItem }), {});
 
 export const AppStateProvider = ({ children }) => {
-  const { data = {} } = useQuery(PRODUCTS_QUERY);
+  const [currency, setCurrency] = useState('USD');
+  const { data = {} } = useQuery(PRODUCTS_QUERY, { variables: { currency } });
   const { products = [] } = data;
   const [cartState, dispatch] = useReducer(cartReducer, {
     store: [],
@@ -107,7 +112,7 @@ export const AppStateProvider = ({ children }) => {
         ...item,
         ...normalizedProducts[item.id],
       })),
-    [cartState]
+    [cartState, normalizedProducts]
   );
   const subTotal = useMemo(
     () => cart.reduce((total, item) => total + item.quantity * item.price, 0),
@@ -143,6 +148,8 @@ export const AppStateProvider = ({ children }) => {
         addToCart,
         closeCart,
         openCart,
+        currency,
+        setCurrency,
       }}
     >
       {children}
@@ -150,6 +157,11 @@ export const AppStateProvider = ({ children }) => {
   );
 };
 
-const useAppState = () => useContext(AppStateContext);
+const useAppState = () => {
+  const appState = useContext(AppStateContext);
+  const currencySymbol = getSymbolFromCurrency(appState.currency);
+
+  return { ...appState, currencySymbol };
+};
 
 export default useAppState;

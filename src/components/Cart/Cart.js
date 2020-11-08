@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import useAppState from '../../appState';
 
@@ -17,15 +18,29 @@ import {
   CheckoutButton,
 } from './Elements';
 
+const CURRENCY_QUERY = gql`
+  {
+    currency
+  }
+`;
+
 const Cart = () => {
-  const { cartIsOpen, cart, closeCart, subTotal } = useAppState();
+  const { data = {} } = useQuery(CURRENCY_QUERY);
+  const currencies = data.currency || [];
+  const {
+    cartIsOpen,
+    cart,
+    closeCart,
+    subTotal,
+    currencySymbol,
+    currency,
+    setCurrency,
+  } = useAppState();
 
   useEffect(() => {
     const body = document.querySelector('body');
     body.style.overflow = cartIsOpen ? 'hidden' : 'scroll';
   }, [cartIsOpen]);
-
-  console.log('cartIs open', cartIsOpen);
 
   if (!cartIsOpen) {
     return null;
@@ -39,8 +54,10 @@ const Cart = () => {
           <Back onClick={closeCart} />
           <Title>Your cart</Title>
         </Header>
-        <Select>
-          <option>USD</option>
+        <Select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+          {currencies.map((currency) => (
+            <option value={currency}>{currency}</option>
+          ))}
         </Select>
         <CartItemDisplay>
           {cart.map((item) => (
@@ -56,7 +73,10 @@ const Cart = () => {
         </CartItemDisplay>
         <SubTotalRow>
           <SubTotalLabel>Subtotal</SubTotalLabel>
-          <SubTotalPrice>${subTotal}</SubTotalPrice>
+          <SubTotalPrice>
+            {currencySymbol}
+            {subTotal}
+          </SubTotalPrice>
         </SubTotalRow>
         <CheckoutButton>Proceed To Checkout</CheckoutButton>
       </Content>

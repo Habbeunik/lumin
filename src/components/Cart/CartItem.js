@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import useAppState from '../../appState';
 
 import {
@@ -13,7 +14,7 @@ import {
 } from './Elements';
 
 const CartItem = ({ quantity, title, img, price, id }) => {
-  const { addToCart, removeFromCart } = useAppState();
+  const { addToCart, removeFromCart, currencySymbol } = useAppState();
 
   return (
     <CartItemWrap>
@@ -29,7 +30,10 @@ const CartItem = ({ quantity, title, img, price, id }) => {
           onDecrease={() => removeFromCart(id)}
         />
         <PriceWrap>
-          <Price>${price * quantity}</Price>
+          <Price>
+            {currencySymbol}
+            {price * quantity}
+          </Price>
         </PriceWrap>
       </CartItemBottomRow>
     </CartItemWrap>
