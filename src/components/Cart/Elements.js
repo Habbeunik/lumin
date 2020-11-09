@@ -51,7 +51,7 @@ export const BackButton = styled.div`
 `;
 export const Back = ({ onClick }) => (
   <BackButton onClick={onClick}>
-    <img src={BackIcon} />
+    <img src={BackIcon} alt="back" />
   </BackButton>
 );
 export const Title = styled.span`

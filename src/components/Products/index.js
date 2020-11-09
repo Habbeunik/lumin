@@ -11,7 +11,7 @@ import {
 } from './Elements';
 import ProductItem from './ProductItem';
 
-const Products = ({}) => {
+const Products = () => {
   const { addToCart, products, currencySymbol } = useAppState();
 
   return (

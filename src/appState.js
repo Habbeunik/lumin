@@ -70,6 +70,7 @@ const cartReducer = (state, action) => {
         isOpen: true,
         store: getNewStore(state.store, action.payload.id, 1),
       };
+
     case 'REMOVE_FROM_CART':
       return {
         ...state,
@@ -79,16 +80,21 @@ const cartReducer = (state, action) => {
           action.payload.count || -1
         ),
       };
+
     case 'CLOSE_CART':
       return {
         ...state,
         isOpen: false,
       };
+
     case 'OPEN_CART':
       return {
         ...state,
         isOpen: true,
       };
+
+    default:
+      return state;
   }
 };
 
